@@ -3,6 +3,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Dog
 from .models import Feeding
+from .models import Toy
 from .forms import FeedingForm
 
 
@@ -38,17 +39,41 @@ def add_feeding(request, dog_id):
     return redirect('detail', dog_id=dog_id)
 
 
-class DogCreate(CreateView):
-    model = Dog
-    fields = '__all__'
-
-
 class DogUpdate(UpdateView):
     model = Dog
-    # Let's disallow the renaming of a cat by excluding the name field!
     fields = ['breed', 'nickname', 'age']
 
 
 class DogDelete(DeleteView):
     model = Dog
     success_url = '/dogs/'
+
+
+def toys_index(request):
+    toys = Toy.objects.all()
+    return render(request, 'toys/index.html', {'toys': toys})
+
+
+def toys_detail(request, toy_id):
+    toy = Toy.objects.get(id=toy_id)
+    return render(request, 'toys/detail.html', {'toy': toy})
+
+
+class ToyCreate(CreateView):
+    model = Toy
+    fields = '__all__'
+
+
+class ToyUpdate(UpdateView):
+    model = Toy
+    fields = ['color', 'description']
+
+
+class ToyDelete(DeleteView):
+    model = Toy
+    success_url = '/toys/'
+
+
+class DogCreate(CreateView):
+    model = Dog
+    fields = '__all__'
